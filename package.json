@@ -1,0 +1,64 @@
+{
+  "name": "can-event-dom-radiochange",
+  "description": "Custom radiochange event",
+  "version": "0.0.0",
+  "author": {
+    "name": "Chris Andrejewski",
+    "email": "core@donejs.com",
+    "url": "https://bitovi.com"
+  },
+  "bugs": {
+    "url": "https://github.com/canjs/can-event-dom-radiochange/issues"
+  },
+  "dependencies": {
+    "can-dom-events": "file:../can-dom-events",
+    "can-util": "^3.8.4"
+  },
+  "devDependencies": {
+    "fixpack": "^2.3.1",
+    "jshint": "^2.9.1",
+    "steal": "^1.3.1",
+    "steal-qunit": "^1.0.1",
+    "steal-tools": "^1.2.0",
+    "testee": "^0.6.0"
+  },
+  "files": [
+    "src",
+    "dist"
+  ],
+  "homepage": "https://canjs.com/doc/can-event-dom-radiochange.html",
+  "keywords": [
+    "canjs",
+    "change",
+    "event",
+    "radio"
+  ],
+  "license": "MIT",
+  "main": "dist/cjs/can-event-dom-radiochange",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/canjs/can-event-dom-radiochange.git"
+  },
+  "scripts": {
+    "build": "node build.js",
+    "install-canary": "npm install --no-shrinkwrap",
+    "install-locked": "npm install",
+    "jshint": "jshint ./*.js --config",
+    "lint": "fixpack && npm run jshint",
+    "postpublish": "git push --tags && git checkout master && git branch -D release && git push",
+    "preversion": "npm test && npm run build",
+    "release:major": "npm version major && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:patch": "npm version patch && npm publish",
+    "test": "npm run lint && npm run testee",
+    "testee": "testee test.html --browsers firefox",
+    "version": "git commit -am \"Update version number\" && git checkout -b release && git add -f dist/"
+  },
+  "steal": {
+    "main": "can-event-dom-radiochange",
+    "npmIgnore": [
+      "testee",
+      "steal-tools"
+    ]
+  }
+}
