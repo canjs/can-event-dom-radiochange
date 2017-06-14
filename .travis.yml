@@ -1,15 +1,23 @@
 language: node_js
 node_js: node
 before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - "npm i -g greenkeeper-lockfile@1"
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- npm i -g greenkeeper-lockfile@1
 before_script: greenkeeper-lockfile-update
 after_script: greenkeeper-lockfile-upload
 matrix:
   include:
-    - env: INSTALL_TYPE="locked"
-    - env: INSTALL_TYPE="canary"
+  - env: INSTALL_TYPE="locked"
+  - env: INSTALL_TYPE="canary"
 install: npm run install-$INSTALL_TYPE
 addons:
-  firefox: "51.0"
+  firefox: '51.0'
+deploy:
+  provider: npm
+  email: core@donejs.com
+  api_key:
+    secure: B0bndtdD/HlfxiXjFRLrIqeoaY+oa8K4RdZPXyhH0A5kovrbMmea420CmfbKrTNcyJWdM7Ar0S2cX4IYn6f8la17pyEOY2azmZzJ1oIuURrQHkkMOwHa6yYgmsslcB33mzhnyMHWDxjR10FQTDTIXl7zupG8mxqsOkbsFE8QKDoPAKZUGtitgy3FGhKzu4tHdH0ijmwfUzkbUC1X9pVcirW2qL5lfNlBbiAaTg9Czh4+t74F4dTN4mzKjbSAT4cnYi7vr9hcAhOTCxs/tLvBlRUzkjsLLLph9bNYFLmfdZyfQrOaBjrCgMKwloyr1/uMHkEM+2zwt5CQaZtzRTFpGLV+b0jDJemERmF99khUSrjqYHBepNY+QztCV0hxBOQMReX/tNVp3fDOLCYP5PXCsnzgy6htgeKqK7+6E0KXN9Gv7bWewwZDv/FJgWf2SNTU5vZgHwPOULIu0+wiQYe4AMmmzmIxOK+aEzxPjXZep6+tUbSQaje8UQvbysxKsdGcSb1qp85bsL0qq/OcbGVy6uEUB2adQLVTBihiYtrJ40FqFg1c4sXEXIw+EfP7hB0ik2A5Y0bcYpcfgqsHwzBrW1fmXWxu7Ms+PBf/W6wNSvWmcJb+US//HXTPyjeuNZshyqw+yE/ZQb6zWyOLpDzq785qKs6PcEbzVKn9PHDmNms=
+  on:
+    tags: true
+    repo: canjs/can-event-dom-radiochange
