@@ -22,10 +22,6 @@
     "steal-tools": "^1.2.0",
     "testee": "^0.6.0"
   },
-  "files": [
-    "src",
-    "dist"
-  ],
   "homepage": "https://canjs.com/doc/can-event-dom-radiochange.html",
   "keywords": [
     "canjs",
@@ -34,7 +30,7 @@
     "radio"
   ],
   "license": "MIT",
-  "main": "dist/cjs/can-event-dom-radiochange",
+  "main": "can-event-dom-radiochange",
   "repository": {
     "type": "git",
     "url": "git://github.com/canjs/can-event-dom-radiochange.git"
