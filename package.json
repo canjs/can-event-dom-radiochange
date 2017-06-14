@@ -41,14 +41,9 @@
     "install-locked": "npm install",
     "jshint": "jshint ./*.js --config",
     "lint": "fixpack && npm run jshint",
-    "postpublish": "git push --tags && git checkout master && git branch -D release && git push",
     "preversion": "npm test && npm run build",
-    "release:major": "npm version major && npm publish",
-    "release:minor": "npm version minor && npm publish",
-    "release:patch": "npm version patch && npm publish",
     "test": "npm run lint && npm run testee",
-    "testee": "testee test.html --browsers firefox",
-    "version": "git commit -am \"Update version number\" && git checkout -b release && git add -f dist/"
+    "testee": "testee test.html --browsers firefox"
   },
   "steal": {
     "main": "can-event-dom-radiochange",
