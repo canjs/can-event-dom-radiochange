@@ -119,20 +119,18 @@ function removeListener (eventName, el) {
  * radios. By using this event instead, deselected radios receive notification.
  *
  * ```js
- * var events = require("can-util/dom/events/events");
- * var radioChange = require("can-util/dom/events/radiochange/radiochange");
- * events.addCustomEvent(radioChange);
+ * var domEvents = require('can-dom-events');
+ * var radioChange = require('can-event-dom-radiochange');
+ * domEvents.addEvent(radioChange);
  *
- * var el = document.createElement("div");
+ * var target = document.createElement('input');
  *
- * function radiochangeHandler() {
- * 	console.log("radiochange event fired");
+ * function handler () {
+ * 	console.log('radiochange event fired');
  * }
  *
- * events.addEventListener.call(el, "radiochange", radiochangeHandler, false);
- * events.removeEventListener.call(el, "radiochange", radiochangeHandler);
- *
- * events.removeCustomEvent(radioChange);
+ * domEvents.addEventListener(target, 'radiochange', handler);
+ * domEvents.removeEventListener(target, 'radiochange', handler);
  * ```
  */
 module.exports = {

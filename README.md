@@ -12,8 +12,8 @@ With StealJS, you can import this module directly in an auto-rendered template:
 
 ```js
 import radioChange from 'can-event-dom-radiochange';
-import domEvents from 'can-util/dom/events';
-domEvents.addCustomEvent(radioChange);
+import domEvents from 'can-dom-events';
+domEvents.addEvent(radioChange);
 ```
 
 ### CommonJS use
@@ -23,8 +23,8 @@ needed to create a template that uses `can-event-dom-radiochange`:
 
 ```js
 var radioChange = require("can-event-dom-radiochange");
-var domEvents = require('can-util/dom/events');
-domEvents.addCustomEvent(radioChange);
+var domEvents = require('can-dom-events');
+domEvents.addEvent(radioChange);
 ```
 
 ### Standalone use
