@@ -11,7 +11,7 @@
     "url": "https://github.com/canjs/can-event-dom-radiochange/issues"
   },
   "dependencies": {
-    "can-dom-events": "0.0.3",
+    "can-dom-events": "^1.0.2",
     "can-util": "^3.8.4"
   },
   "devDependencies": {
