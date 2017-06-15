@@ -1,7 +1,7 @@
 {
   "name": "can-event-dom-radiochange",
   "description": "Custom radiochange event",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "author": {
     "name": "Chris Andrejewski",
     "email": "core@donejs.com",
