@@ -108,7 +108,7 @@ function removeListener (eventName, el) {
 }
 
 /**
- * @module {events} can-event-radiochange
+ * @module {events} can-event-dom-radiochange
  * @parent can-infrastructure
  *
  * A custom event for listening to changes of inputs with type "radio",

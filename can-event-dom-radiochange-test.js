@@ -2,14 +2,35 @@
 
 var QUnit = require('steal-qunit');
 var domEvents = require('can-dom-events');
+var oldEvents = require('can-util/dom/events/events');
+var definition = require('./can-event-dom-radiochange');
 var compat = require('./compat');
 
 function fixture () {
 	return document.getElementById("qunit-fixture");
 }
 
-var overrideStrategy = {
-	name: 'override()',
+// Fix oldEvent calls to match new syntax
+function newifyOldEvents (oldEvents) {
+	return {
+		addEventListener: function (target) {
+			var args = Array.prototype.slice.call(arguments, 1);
+			return oldEvents.addEventListener.apply(target, args);
+		},
+		removeEventListener: function (target) {
+			var args = Array.prototype.slice.call(arguments, 1);
+			return oldEvents.removeEventListener.apply(target, args);
+		},
+		dispatch: function (target) {
+			var args = Array.prototype.slice.call(arguments, 1);
+			return oldEvents.dispatch.apply(target, args);
+		},
+	};
+}
+
+var compatWithNew = {
+	name: 'compat with can-dom-events',
+	domEvents: domEvents,
 	setup: function () {
 		this.removeEvent = compat(domEvents);
 	},
@@ -18,14 +39,44 @@ var overrideStrategy = {
 	}
 };
 
+var compatWithOld = {
+	name: 'compat with can-util/dom/events',
+	domEvents: newifyOldEvents(oldEvents),
+	setup: function () {
+		this.removeEvent = compat(oldEvents);
+	},
+	teardown: function () {
+		this.removeEvent();
+	}
+};
+
+var rawNewDomEvents = {
+	name: 'plain with can-dom-events',
+	domEvents: domEvents,
+	setup: function () {
+		this.removeEvent = domEvents.addEvent(definition);
+	},
+	teardown: function () {
+		this.removeEvent();
+	}
+};
+
+var suites = [
+	compatWithOld,
+	compatWithNew,
+	rawNewDomEvents
+];
+
 function runTests (mod) {
 	QUnit.module(mod.name, {
 		setup: mod.setup,
 		teardown: mod.teardown
 	});
 
+	var domEvents = mod.domEvents;
+
 	test("subscription to an untracked radio should call listener", function (assert) {
-		expect(1);
+		assert.expect(1);
 		var listener = document.createElement('input');
 		listener.id = 'listener';
 		listener.type = 'radio';
@@ -48,7 +99,7 @@ function runTests (mod) {
 	});
 
 	test("subscription to a tracked radio should call itself", function (assert) {
-		expect(1);
+		assert.expect(1);
 		var radio = document.createElement('input');
 		radio.id = 'selfish';
 		radio.type = 'radio';
@@ -65,4 +116,4 @@ function runTests (mod) {
 	});
 }
 
-runTests(overrideStrategy);
+suites.forEach(runTests);
