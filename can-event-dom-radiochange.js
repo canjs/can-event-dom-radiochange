@@ -110,6 +110,7 @@ function removeListener (eventName, el) {
 /**
  * @module {events} can-event-dom-radiochange
  * @parent can-infrastructure
+ * @package ./package.json
  *
  * A custom event for listening to changes of inputs with type "radio",
  * which fires when a conflicting radio input changes. A "conflicting"
