@@ -1,36 +1,28 @@
 # can-event-dom-radiochange
 
-[![Build Status](https://travis-ci.org/canjs/can-event-dom-radiochange.svg?branch=master)](https://travis-ci.org/canjs/can-event-dom-radiochange)
+[![Join the chat at https://gitter.im/canjs/canjs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/canjs/canjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/canjs/can-event-dom-radiochange/blob/master/LICENSE)
+[![npm version](https://badge.fury.io/js/can-event-dom-radiochange.svg)](https://www.npmjs.com/package/can-event-dom-radiochange)
+[![Travis build status](https://travis-ci.org/canjs/can-event-dom-radiochange.svg?branch=master)](https://travis-ci.org/canjs/can-event-dom-radiochange)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/canjs/can-event-dom-radiochange?branch=master&svg=true)](https://ci.appveyor.com/project/matthewp/can-event-dom-radiochange)
+[![Coverage status](https://coveralls.io/repos/github/canjs/can-event-dom-radiochange/badge.svg?branch=master)](https://coveralls.io/github/canjs/can-event-dom-radiochange?branch=master)
+[![Greenkeeper badge](https://badges.greenkeeper.io/canjs/can-event-dom-radiochange.svg)](https://greenkeeper.io/)
 
 A custom event for listening to changes of inputs with type "radio", which fires when a conflicting radio input changes. A "conflicting" radio button has the same "name" attribute and exists within in the same form, or lack thereof. This event coordinates state bound to whether a radio is checked. The "change" event does not fire for deselected radios. By using this event instead, deselected radios receive notification.
 
-## Usage
+## Documentation
 
-### ES6 use
+Read the [can-event-dom-radiochange API docs on CanJS.com](https://canjs.com/doc/can-event-dom-radiochange.html).
 
-With StealJS, you can import this module directly in an auto-rendered template:
+## Changelog
 
-```js
-import radioChange from 'can-event-dom-radiochange';
-import domEvents from 'can-dom-events';
-domEvents.addEvent(radioChange);
-```
+See the [latest releases on GitHub](https://github.com/canjs/can-event-dom-radiochange/releases).
 
-### CommonJS use
+## Contributing
 
-Use `require` to load `can-event-dom-radiochange` and everything else
-needed to create a template that uses `can-event-dom-radiochange`:
+The [contribution guide](https://github.com/canjs/can-event-dom-radiochange/blob/master/CONTRIBUTING.md) has information on getting help, reporting bugs, developing locally, and more.
 
-```js
-var radioChange = require("can-event-dom-radiochange");
-var domEvents = require('can-dom-events');
-domEvents.addEvent(radioChange);
-```
+## License
 
-### Standalone use
+[MIT](https://github.com/canjs/can-event-dom-radiochange/blob/master/LICENSE)
 
-Load the `global` version of the plugin:
-
-```html
-<script src='./node_modules/can-event-dom-radiochange/dist/global/can-event-dom-radiochange.js'></script>
-```
