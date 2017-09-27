@@ -2,7 +2,7 @@
 
 var events = require('can-util/dom/events/events');
 var domData = require('can-util/dom/data/data');
-var getDocument = require('can-util/dom/document/document');
+var getDocument = require('can-globals/document/document');
 var domEvents = require('can-dom-events');
 var CIDMap = require('can-util/js/cid-map/cid-map');
 
