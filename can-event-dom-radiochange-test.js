@@ -2,7 +2,6 @@
 
 var QUnit = require('steal-qunit');
 var domEvents = require('can-dom-events');
-var oldEvents = require('can-util/dom/events/events');
 var definition = require('./can-event-dom-radiochange');
 var compat = require('./compat');
 
@@ -10,40 +9,11 @@ function fixture () {
 	return document.getElementById("qunit-fixture");
 }
 
-// Fix oldEvent calls to match new syntax
-function newifyOldEvents (oldEvents) {
-	return {
-		addEventListener: function (target) {
-			var args = Array.prototype.slice.call(arguments, 1);
-			return oldEvents.addEventListener.apply(target, args);
-		},
-		removeEventListener: function (target) {
-			var args = Array.prototype.slice.call(arguments, 1);
-			return oldEvents.removeEventListener.apply(target, args);
-		},
-		dispatch: function (target) {
-			var args = Array.prototype.slice.call(arguments, 1);
-			return oldEvents.dispatch.apply(target, args);
-		},
-	};
-}
-
 var compatWithNew = {
 	name: 'compat with can-dom-events',
 	domEvents: domEvents,
 	setup: function () {
 		this.removeEvent = compat(domEvents);
-	},
-	teardown: function () {
-		this.removeEvent();
-	}
-};
-
-var compatWithOld = {
-	name: 'compat with can-util/dom/events',
-	domEvents: newifyOldEvents(oldEvents),
-	setup: function () {
-		this.removeEvent = compat(oldEvents);
 	},
 	teardown: function () {
 		this.removeEvent();
@@ -62,7 +32,6 @@ var rawNewDomEvents = {
 };
 
 var suites = [
-	compatWithOld,
 	compatWithNew,
 	rawNewDomEvents
 ];
