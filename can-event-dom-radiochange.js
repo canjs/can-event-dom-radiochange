@@ -1,10 +1,9 @@
 'use strict';
 
-var events = require('can-util/dom/events/events');
-var domData = require('can-util/dom/data/data');
+var domData = require('can-dom-data-state');
 var getDocument = require('can-globals/document/document');
 var domEvents = require('can-dom-events');
-var CIDMap = require('can-util/js/cid-map/cid-map');
+var CIDMap = require('can-cid/map/map');
 
 function getRoot (el) {
 	return el.ownerDocument || getDocument().documentElement;
@@ -62,7 +61,7 @@ function dispatch (eventName, target) {
 	});
 }
 
-function attachRootListener (root, eventName) {
+function attachRootListener (root, eventName, events) {
 	var listenerName = getListenerName(eventName);
 	var listener = domData.get.call(root, listenerName);
 	if (listener) {
@@ -74,11 +73,11 @@ function attachRootListener (root, eventName) {
 			dispatch(eventName, target);
 		}
 	};
-	events.addEventListener.call(root, 'change', newListener);
+	events.addEventListener(root, 'change', newListener);
 	domData.set.call(root, listenerName, newListener);
 }
 
-function detachRootListener (root, eventName) {
+function detachRootListener (root, eventName, events) {
 	var listenerName = getListenerName(eventName);
 	var listener = domData.get.call(root, listenerName);
 	if (!listener) {
@@ -88,23 +87,23 @@ function detachRootListener (root, eventName) {
 	if (registry.size > 0) {
 		return;
 	}
-	events.removeEventListener.call(root, 'change', listener);
+	events.removeEventListener(root, 'change', listener);
 	domData.clean.call(root, listenerName);
 }
 
-function addListener (eventName, el) {
+function addListener (eventName, el, events) {
 	if (!isRadioInput(el)) {
 		throw new Error('Listeners for ' + eventName + ' must be radio inputs');
 	}
 	var root = getRoot(el);
 	getRegistry(root, eventName).set(el, el);
-	attachRootListener(root, eventName);
+	attachRootListener(root, eventName, events);
 }
 
-function removeListener (eventName, el) {
+function removeListener (eventName, el, events) {
 	var root = getRoot(el);
 	getRegistry(root, eventName).delete(el);
-	detachRootListener(root, eventName);
+	detachRootListener(root, eventName, events);
 }
 
 /**
@@ -138,12 +137,12 @@ module.exports = {
 	defaultEventType: 'radiochange',
 
 	addEventListener: function (target, eventName, handler) {
-		addListener(eventName, target);
+		addListener(eventName, target, this);
 		target.addEventListener(eventName, handler);
 	},
 
 	removeEventListener: function (target, eventName, handler) {
-		removeListener(eventName, target);
+		removeListener(eventName, target, this);
 		target.removeEventListener(eventName, handler);
 	}
 };
