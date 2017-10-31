@@ -1,7 +1,7 @@
 {
   "name": "can-event-dom-radiochange",
   "description": "Custom radiochange event",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": {
     "name": "Chris Andrejewski",
     "email": "core@donejs.com",
@@ -40,14 +40,14 @@
   },
   "scripts": {
     "build": "node build.js",
+    "detect-cycle": "detect-cyclic-packages --ignore done-serve",
     "install-canary": "npm install --no-shrinkwrap",
     "install-locked": "npm install",
     "jshint": "jshint ./*.js --config",
     "lint": "fixpack && npm run jshint",
     "preversion": "npm test && npm run build",
     "test": "npm run detect-cycle && npm run lint && npm run testee",
-    "testee": "testee test.html --browsers firefox",
-    "detect-cycle": "detect-cyclic-packages --ignore done-serve"
+    "testee": "testee test.html --browsers firefox"
   },
   "steal": {
     "main": "can-event-dom-radiochange",
