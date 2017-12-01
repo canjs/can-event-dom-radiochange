@@ -14,7 +14,7 @@
     "can-cid": "^1.1.0",
     "can-dom-data-state": "^0.2.0",
     "can-dom-events": "^1.0.2",
-    "can-globals": "^0.2.2"
+    "can-globals": "<2.0.0"
   },
   "devDependencies": {
     "detect-cyclic-packages": "^1.1.0",
