@@ -83,3 +83,20 @@ npm run document
 This will create a `docs/` folder that contains a browsable site with all of your documentation.
 
 With the dev server running, you can view the docs at http://localhost:8080/docs/
+
+### Making a release
+
+Run any of following commands to make a release:
+
+```shell
+npm version prerelease
+npm version patch
+npm version minor
+npm version major
+```
+
+This will run the tests, make a build, bump the version number, and push the git
+tag for the release.
+
+See the [Making releases](https://canjs.com/doc/guides/contributing/releases.html#Makingreleases)
+docs to learn how to decide which type of version you should release.
