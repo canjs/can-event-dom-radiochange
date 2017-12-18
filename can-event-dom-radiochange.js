@@ -3,7 +3,6 @@
 var domData = require('can-dom-data-state');
 var getDocument = require('can-globals/document/document');
 var domEvents = require('can-dom-events');
-var CIDMap = require('can-cid/map/map');
 
 function getRoot (el) {
 	return el.ownerDocument || getDocument().documentElement;
@@ -21,7 +20,7 @@ function getRegistry (root, eventName) {
 	var name = getRegistryName(eventName);
 	var registry = domData.get.call(root, name);
 	if (!registry) {
-		registry = new CIDMap();
+		registry = new Map();
 		domData.set.call(root, name, registry);
 	}
 	return registry;
