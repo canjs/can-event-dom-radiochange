@@ -1,29 +1,9 @@
 'use strict';
 
-var domData = require('can-dom-data-state');
 var getDocument = require('can-globals/document/document');
-var domEvents = require('can-dom-events');
 
-function getRoot (el) {
-	return el.ownerDocument || getDocument().documentElement;
-}
-
-function getRegistryName (eventName) {
-	return 'can-event-radiochange:' + eventName + ':registry';
-}
-
-function getListenerName (eventName) {
-	return 'can-event-radiochange:' + eventName + ':listener';
-}
-
-function getRegistry (root, eventName) {
-	var name = getRegistryName(eventName);
-	var registry = domData.get.call(root, name);
-	if (!registry) {
-		registry = new Map();
-		domData.set.call(root, name, registry);
-	}
-	return registry;
+function getRoot () {
+	return getDocument().documentElement;
 }
 
 function findParentForm (el) {
@@ -50,59 +30,32 @@ function isRadioInput (el) {
 	return el.nodeName === 'INPUT' && el.type === 'radio';
 }
 
-function dispatch (eventName, target) {
-	var root = getRoot(target);
-	var registry = getRegistry(root, eventName);
-	registry.forEach(function (el) {
-		if (shouldReceiveEventFromRadio(target, el)) {
-			domEvents.dispatch(el, eventName);
-		}
-	});
-}
 
-function attachRootListener (root, eventName, events) {
-	var listenerName = getListenerName(eventName);
-	var listener = domData.get.call(root, listenerName);
-	if (listener) {
-		return;
-	}
+function attachRootListener (domEvents, eventTypeTargets) {
+	var root = getRoot();
 	var newListener = function (event) {
 		var target = event.target;
-		if (isRadioInput(target)) {
-			dispatch(eventName, target);
+		if (!isRadioInput(target)) {
+			return;
+		}
+
+		for (var eventType in eventTypeTargets) {
+			var newEvent = {type: eventType};
+			var listeningNodes = eventTypeTargets[eventType];
+			listeningNodes.forEach(function (el) {
+				if (shouldReceiveEventFromRadio(target, el)) {
+					domEvents.dispatch(el, newEvent, false);
+				}
+			});
 		}
 	};
-	events.addEventListener(root, 'change', newListener);
-	domData.set.call(root, listenerName, newListener);
+	domEvents.addEventListener(root, 'change', newListener);
+	return newListener;
 }
 
-function detachRootListener (root, eventName, events) {
-	var listenerName = getListenerName(eventName);
-	var listener = domData.get.call(root, listenerName);
-	if (!listener) {
-		return;
-	}
-	var registry = getRegistry(root, eventName);
-	if (registry.size > 0) {
-		return;
-	}
-	events.removeEventListener(root, 'change', listener);
-	domData.clean.call(root, listenerName);
-}
-
-function addListener (eventName, el, events) {
-	if (!isRadioInput(el)) {
-		throw new Error('Listeners for ' + eventName + ' must be radio inputs');
-	}
-	var root = getRoot(el);
-	getRegistry(root, eventName).set(el, el);
-	attachRootListener(root, eventName, events);
-}
-
-function removeListener (eventName, el, events) {
-	var root = getRoot(el);
-	getRegistry(root, eventName).delete(el);
-	detachRootListener(root, eventName, events);
+function detachRootListener (domEvents, listener) {
+	var root = getRoot();
+	domEvents.removeEventListener(root, 'change', listener);
 }
 
 /**
@@ -133,16 +86,57 @@ function removeListener (eventName, el, events) {
  * domEvents.removeEventListener(target, 'radiochange', handler);
  * ```
  */
-module.exports = {
+var radioChangeEvent = {
 	defaultEventType: 'radiochange',
 
-	addEventListener: function (target, eventName, handler) {
-		addListener(eventName, target, this);
-		target.addEventListener(eventName, handler);
+	addEventListener: function (target, eventType, handler) {
+		if (!isRadioInput(target)) {
+			throw new Error('Listeners for ' + eventType + ' must be radio inputs');
+		}
+
+		var eventTypeTrackedRadios = radioChangeEvent._eventTypeTrackedRadios;
+		if (!eventTypeTrackedRadios) {
+			eventTypeTrackedRadios = radioChangeEvent._eventTypeTrackedRadios = {};
+			if (!radioChangeEvent._rootListener) {
+				radioChangeEvent._rootListener = attachRootListener(this, eventTypeTrackedRadios);
+			}			
+		}
+
+		var trackedRadios = radioChangeEvent._eventTypeTrackedRadios[eventType];
+		if (!trackedRadios) {
+			trackedRadios = radioChangeEvent._eventTypeTrackedRadios[eventType] = new Set();
+		}
+
+		trackedRadios.add(target);
+		target.addEventListener(eventType, handler);
 	},
 
-	removeEventListener: function (target, eventName, handler) {
-		removeListener(eventName, target, this);
-		target.removeEventListener(eventName, handler);
+	removeEventListener: function (target, eventType, handler) {
+		target.removeEventListener(eventType, handler);
+
+		var eventTypeTrackedRadios = radioChangeEvent._eventTypeTrackedRadios;
+		if (!eventTypeTrackedRadios) {
+			return;
+		}
+
+		var trackedRadios = eventTypeTrackedRadios[eventType];
+		if (!trackedRadios) {
+			return;
+		}
+	
+		trackedRadios.delete(target);
+		if (trackedRadios.size === 0) {
+			delete eventTypeTrackedRadios[eventType];
+			for (var key in eventTypeTrackedRadios) {
+				if (eventTypeTrackedRadios.hasOwnProperty(key)) {
+					return;
+				}						
+			}
+			delete radioChangeEvent._eventTypeTrackedRadios;
+			detachRootListener(this, radioChangeEvent._rootListener);
+			delete radioChangeEvent._rootListener;
+		}
 	}
 };
+
+module.exports = radioChangeEvent;
