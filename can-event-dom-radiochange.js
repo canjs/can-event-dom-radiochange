@@ -1,6 +1,7 @@
 'use strict';
 
 var getDocument = require('can-globals/document/document');
+var namespace = require('can-namespace');
 
 function getRoot () {
 	return getDocument().documentElement;
@@ -139,4 +140,4 @@ var radioChangeEvent = {
 	}
 };
 
-module.exports = radioChangeEvent;
+module.exports = namespace.domEventRadioChange = radioChangeEvent;

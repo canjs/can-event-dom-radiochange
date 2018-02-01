@@ -4,6 +4,7 @@ var QUnit = require('steal-qunit');
 var domEvents = require('can-dom-events');
 var definition = require('./can-event-dom-radiochange');
 var compat = require('./compat');
+var canNamespace = require('can-namespace');
 
 function fixture () {
 	return document.getElementById("qunit-fixture");
@@ -86,3 +87,9 @@ function runTests (mod) {
 }
 
 suites.forEach(runTests);
+
+QUnit.module("can-event-dom-radiochange plain");
+
+test("adds event to can-namespace", function(assert) {
+	assert.equal(canNamespace.domEventRadioChange, definition, "event is added");
+});
