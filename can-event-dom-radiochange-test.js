@@ -39,13 +39,13 @@ var suites = [
 
 function runTests (mod) {
 	QUnit.module(mod.name, {
-		setup: mod.setup,
-		teardown: mod.teardown
+		beforeEach: mod.setup,
+		afterEach: mod.teardown
 	});
 
 	var domEvents = mod.domEvents;
 
-	test("subscription to an untracked radio should call listener", function (assert) {
+	QUnit.test("subscription to an untracked radio should call listener", function (assert) {
 		assert.expect(1);
 		var listener = document.createElement('input');
 		listener.id = 'listener';
@@ -68,7 +68,7 @@ function runTests (mod) {
 		domEvents.dispatch(radio, 'change');
 	});
 
-	test("subscription to a tracked radio should call itself", function (assert) {
+	QUnit.test("subscription to a tracked radio should call itself", function (assert) {
 		assert.expect(1);
 		var radio = document.createElement('input');
 		radio.id = 'selfish';
@@ -90,6 +90,6 @@ suites.forEach(runTests);
 
 QUnit.module("can-event-dom-radiochange plain");
 
-test("adds event to can-namespace", function(assert) {
+QUnit.test("adds event to can-namespace", function(assert) {
 	assert.equal(canNamespace.domEventRadioChange, definition, "event is added");
 });
